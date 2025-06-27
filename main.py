@@ -1,5 +1,4 @@
-```python
-def add_todo():
+def add_task():
     """
     Adds a new task to the task list.
     """
@@ -18,6 +17,7 @@ def delete_task():
         if 0 <= index_input < len(tasks):
             tasks.pop(index_input)
             print("Task deleted successfully")
+            print(f"Updated List: {tasks}")
         else:
             print("Invalid number. Please enter a correct index.")
     except ValueError:
@@ -34,6 +34,7 @@ def update_task():
             updated_task = input(f"Enter new task to replace '{tasks[index_input]}': ")
             tasks[index_input] = updated_task
             print("Task updated successfully")
+            print(f"Updated List: {tasks}")
         else:
             print("Invalid number. Please enter a correct index.")
     except ValueError:
@@ -67,24 +68,20 @@ def save_tasks_to_file():
 tasks = load_tasks_from_file()
 print(f"Current tasks: {tasks}")
 
-actions = {
-    1: add_todo,
-    2: delete_task,
-    3: update_task,
-    0: exit
-}
-
 while True:
     try:
         action = int(input("1- Add Task\n2- Remove Task\n3- Update Task\n0- Exit\n>> "))
-        if action in actions:
-            if action == 0:
-                print("Exiting Task Manager")
-                break
-            actions[action]()
-            save_tasks_to_file()
+        if action == 0:
+            print("Exiting Task Manager")
+            break
+        elif action == 1:
+            add_task()
+        elif action == 2:
+            delete_task()
+        elif action == 3:
+            update_task()
         else:
             print("Please enter a valid option.")
+        save_tasks_to_file()
     except ValueError:
         print("Invalid input. Please enter a number.")
-```
