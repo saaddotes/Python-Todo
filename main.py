@@ -5,10 +5,10 @@ def add_task(task_list):
     task_description = input("Enter a new task: ").strip()
     if task_description:
         task_list.append(task_description)
-        print("Task added successfully")
+        print("Task added successfully.")
     else:
         print("No task entered.")
-    print(f"Updated List: {task_list}")
+    print(f"Updated Task List: {task_list}")
 
 
 def delete_task(task_list):
@@ -22,12 +22,12 @@ def delete_task(task_list):
         index = int(input(f"Enter the task number to delete (1 to {len(task_list)}): ")) - 1
         if 0 <= index < len(task_list):
             task_list.pop(index)
-            print("Task deleted successfully")
+            print("Task deleted successfully.")
         else:
             print("Invalid number. Please enter a correct index.")
     except ValueError:
-        print("Invalid input. Please enter a number.")
-    print(f"Updated List: {task_list}")
+        print("Invalid input. Please enter a numerical index.")
+    print(f"Updated Task List: {task_list}")
 
 
 def update_task(task_list):
@@ -40,18 +40,19 @@ def update_task(task_list):
     try:
         index = int(input(f"Enter the task number to update (1 to {len(task_list)}): ")) - 1
         if 0 <= index < len(task_list):
-            new_description = input(f"Enter new task to replace '{task_list[index]}': ").strip()
+            current_task = task_list[index]
+            new_description = input(f"Enter new task to replace '{current_task}': ").strip()
             if new_description:
                 task_list[index] = new_description
-                print("Task updated successfully")
+                print("Task updated successfully.")
             else:
-                print("No new task entered.")
+                print("Task not updated. No new description entered.")
         else:
             print("Invalid number. Please enter a correct index.")
     except ValueError:
-        print("Invalid input. Please enter a number.")
+        print("Invalid input. Please enter a numerical index.")
 
-    print(f"Updated List: {task_list}")
+    print(f"Updated Task List: {task_list}")
 
 
 def load_tasks_from_file(filename="tasks.txt"):
@@ -72,7 +73,7 @@ def save_tasks_to_file(task_list, filename="tasks.txt"):
     try:
         with open(filename, "w") as file:
             file.writelines(task + "\n" for task in task_list)
-        print("Tasks saved to file successfully")
+        print("Tasks saved to file successfully.")
     except IOError as e:
         print(f"Error saving tasks: {e}")
 
@@ -81,18 +82,15 @@ def main():
     tasks = load_tasks_from_file()
     print(f"Current tasks: {tasks}")
 
+    options = {1: add_task, 2: delete_task, 3: update_task}
     while True:
         try:
             action = int(input("1- Add Task\n2- Remove Task\n3- Update Task\n0- Exit\n>> "))
             if action == 0:
-                print("Exiting Task Manager")
+                print("Exiting Task Manager.")
                 break
-            elif action == 1:
-                add_task(tasks)
-            elif action == 2:
-                delete_task(tasks)
-            elif action == 3:
-                update_task(tasks)
+            elif action in options:
+                options[action](tasks)
             else:
                 print("Please enter a valid option.")
             save_tasks_to_file(tasks)
