@@ -2,9 +2,12 @@ def add_task(task_list):
     """
     Adds a new task to the task list.
     """
-    task_description = input("Enter a new task: ")
-    task_list.append(task_description)
-    print("Task added successfully")
+    task_description = input("Enter a new task: ").strip()
+    if task_description:
+        task_list.append(task_description)
+        print("Task added successfully")
+    else:
+        print("No task entered.")
     print(f"Updated List: {task_list}")
 
 
@@ -12,6 +15,9 @@ def delete_task(task_list):
     """
     Deletes a task from the task list using its 1-based index.
     """
+    if not task_list:
+        print("No tasks to delete.")
+        return
     try:
         index = int(input(f"Enter the task number to delete (1 to {len(task_list)}): ")) - 1
         if 0 <= index < len(task_list):
@@ -21,7 +27,6 @@ def delete_task(task_list):
             print("Invalid number. Please enter a correct index.")
     except ValueError:
         print("Invalid input. Please enter a number.")
-    
     print(f"Updated List: {task_list}")
 
 
@@ -29,12 +34,18 @@ def update_task(task_list):
     """
     Updates a task in the task list using its 1-based index.
     """
+    if not task_list:
+        print("No tasks to update.")
+        return
     try:
         index = int(input(f"Enter the task number to update (1 to {len(task_list)}): ")) - 1
         if 0 <= index < len(task_list):
-            new_description = input(f"Enter new task to replace '{task_list[index]}': ")
-            task_list[index] = new_description
-            print("Task updated successfully")
+            new_description = input(f"Enter new task to replace '{task_list[index]}': ").strip()
+            if new_description:
+                task_list[index] = new_description
+                print("Task updated successfully")
+            else:
+                print("No new task entered.")
         else:
             print("Invalid number. Please enter a correct index.")
     except ValueError:
@@ -49,7 +60,7 @@ def load_tasks_from_file(filename="tasks.txt"):
     """
     try:
         with open(filename, "r") as file:
-            return [line.strip() for line in file.readlines()]
+            return [line.strip() for line in file]
     except FileNotFoundError:
         return []
 
@@ -60,8 +71,7 @@ def save_tasks_to_file(task_list, filename="tasks.txt"):
     """
     try:
         with open(filename, "w") as file:
-            for task in task_list:
-                file.write(task + "\n")
+            file.writelines(task + "\n" for task in task_list)
         print("Tasks saved to file successfully")
     except IOError as e:
         print(f"Error saving tasks: {e}")
