@@ -82,7 +82,11 @@ def main():
     tasks = load_tasks_from_file()
     print(f"Current tasks: {tasks}")
 
-    options = {1: add_task, 2: delete_task, 3: update_task}
+    options = {
+        1: add_task,
+        2: delete_task,
+        3: update_task
+    }
     while True:
         try:
             action = int(input("1- Add Task\n2- Remove Task\n3- Update Task\n0- Exit\n>> "))
