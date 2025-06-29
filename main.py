@@ -1,56 +1,56 @@
-def add_task(task_list):
+def add_task(tasks):
     """
     Adds a new task to the task list.
     """
-    task_description = input("Enter a new task: ").strip()
-    if task_description:
-        task_list.append(task_description)
+    new_task = input("Enter a new task: ").strip()
+    if new_task:
+        tasks.append(new_task)
         print("Task added successfully.")
     else:
         print("No task entered.")
-    print(f"Updated Task List: {task_list}")
+    print(f"Updated Task List: {tasks}")
 
 
-def delete_task(task_list):
+def delete_task(tasks):
     """
     Deletes a task from the task list using its 1-based index.
     """
-    if not task_list:
+    if not tasks:
         print("No tasks to delete.")
         return
-    index = prompt_for_index(len(task_list), 'delete')
+    index = get_task_index(len(tasks), 'delete')
     if index is not None:
-        removed_task = task_list.pop(index)
+        removed_task = tasks.pop(index)
         print(f"Task '{removed_task}' deleted successfully.")
-    print(f"Updated Task List: {task_list}")
+    print(f"Updated Task List: {tasks}")
 
 
-def update_task(task_list):
+def update_task(tasks):
     """
     Updates a task in the task list using its 1-based index.
     """
-    if not task_list:
+    if not tasks:
         print("No tasks to update.")
         return
-    index = prompt_for_index(len(task_list), 'update')
+    index = get_task_index(len(tasks), 'update')
     if index is not None:
-        current_task = task_list[index]
+        current_task = tasks[index]
         new_description = input(f"Enter new task to replace '{current_task}': ").strip()
         if new_description:
-            task_list[index] = new_description
+            tasks[index] = new_description
             print("Task updated successfully.")
         else:
             print("Task not updated. No new description entered.")
-    print(f"Updated Task List: {task_list}")
+    print(f"Updated Task List: {tasks}")
 
 
-def prompt_for_index(list_length, action):
+def get_task_index(task_count, action):
     """
-    Prompts for a valid task index for the provided action.
+    Prompts for a valid task index for the specified action.
     """
     try:
-        index = int(input(f"Enter the task number to {action} (1 to {list_length}): ")) - 1
-        if 0 <= index < list_length:
+        index = int(input(f"Enter the task number to {action} (1 to {task_count}): ")) - 1
+        if 0 <= index < task_count:
             return index
         else:
             print("Invalid number. Please enter a correct index.")
@@ -72,13 +72,13 @@ def load_tasks_from_file(filename="tasks.txt"):
         return []
 
 
-def save_tasks_to_file(task_list, filename="tasks.txt"):
+def save_tasks_to_file(tasks, filename="tasks.txt"):
     """
     Saves the current task list to a file.
     """
     try:
         with open(filename, "w") as file:
-            file.writelines(task + "\n" for task in task_list)
+            file.writelines(task + "\n" for task in tasks)
         print("Tasks saved to file successfully.")
     except IOError as e:
         print(f"Error saving tasks: {e}")
@@ -88,7 +88,7 @@ def main():
     tasks = load_tasks_from_file()
     print(f"Current tasks: {tasks}")
 
-    options = {
+    actions = {
         1: add_task,
         2: delete_task,
         3: update_task
@@ -99,8 +99,8 @@ def main():
             if action == 0:
                 print("Exiting Task Manager.")
                 break
-            elif action in options:
-                options[action](tasks)
+            elif action in actions:
+                actions[action](tasks)
             else:
                 print("Please enter a valid option.")
             save_tasks_to_file(tasks)
