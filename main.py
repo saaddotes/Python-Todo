@@ -21,8 +21,8 @@ def delete_task(task_list):
     try:
         index = int(input(f"Enter the task number to delete (1 to {len(task_list)}): ")) - 1
         if 0 <= index < len(task_list):
-            task_list.pop(index)
-            print("Task deleted successfully.")
+            removed_task = task_list.pop(index)
+            print(f"Task '{removed_task}' deleted successfully.")
         else:
             print("Invalid number. Please enter a correct index.")
     except ValueError:
@@ -63,6 +63,7 @@ def load_tasks_from_file(filename="tasks.txt"):
         with open(filename, "r") as file:
             return [line.strip() for line in file]
     except FileNotFoundError:
+        print("File not found. Starting with an empty task list.")
         return []
 
 
