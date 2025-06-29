@@ -18,15 +18,10 @@ def delete_task(task_list):
     if not task_list:
         print("No tasks to delete.")
         return
-    try:
-        index = int(input(f"Enter the task number to delete (1 to {len(task_list)}): ")) - 1
-        if 0 <= index < len(task_list):
-            removed_task = task_list.pop(index)
-            print(f"Task '{removed_task}' deleted successfully.")
-        else:
-            print("Invalid number. Please enter a correct index.")
-    except ValueError:
-        print("Invalid input. Please enter a numerical index.")
+    index = prompt_for_index(len(task_list), 'delete')
+    if index is not None:
+        removed_task = task_list.pop(index)
+        print(f"Task '{removed_task}' deleted successfully.")
     print(f"Updated Task List: {task_list}")
 
 
@@ -37,22 +32,32 @@ def update_task(task_list):
     if not task_list:
         print("No tasks to update.")
         return
+    index = prompt_for_index(len(task_list), 'update')
+    if index is not None:
+        current_task = task_list[index]
+        new_description = input(f"Enter new task to replace '{current_task}': ").strip()
+        if new_description:
+            task_list[index] = new_description
+            print("Task updated successfully.")
+        else:
+            print("Task not updated. No new description entered.")
+    print(f"Updated Task List: {task_list}")
+
+
+def prompt_for_index(list_length, action):
+    """
+    Prompts for a valid task index for the provided action.
+    """
     try:
-        index = int(input(f"Enter the task number to update (1 to {len(task_list)}): ")) - 1
-        if 0 <= index < len(task_list):
-            current_task = task_list[index]
-            new_description = input(f"Enter new task to replace '{current_task}': ").strip()
-            if new_description:
-                task_list[index] = new_description
-                print("Task updated successfully.")
-            else:
-                print("Task not updated. No new description entered.")
+        index = int(input(f"Enter the task number to {action} (1 to {list_length}): ")) - 1
+        if 0 <= index < list_length:
+            return index
         else:
             print("Invalid number. Please enter a correct index.")
+            return None
     except ValueError:
         print("Invalid input. Please enter a numerical index.")
-
-    print(f"Updated Task List: {task_list}")
+        return None
 
 
 def load_tasks_from_file(filename="tasks.txt"):
