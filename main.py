@@ -8,7 +8,7 @@ def add_task(task_list):
         print("Task added successfully.")
     else:
         print("No task entered.")
-    print(f"Updated Task List: {task_list}")
+    print_tasks(task_list)
 
 
 def delete_task(task_list):
@@ -18,11 +18,11 @@ def delete_task(task_list):
     if not task_list:
         print("No tasks to delete.")
         return
-    index = get_task_index(len(task_list), 'delete')
+    index = get_task_index(task_list, 'delete')
     if index is not None:
         removed_task = task_list.pop(index)
         print(f"Task '{removed_task}' deleted successfully.")
-    print(f"Updated Task List: {task_list}")
+    print_tasks(task_list)
 
 
 def update_task(task_list):
@@ -32,7 +32,7 @@ def update_task(task_list):
     if not task_list:
         print("No tasks to update.")
         return
-    index = get_task_index(len(task_list), 'update')
+    index = get_task_index(task_list, 'update')
     if index is not None:
         current_task = task_list[index]
         new_description = input(f"Enter new task description to replace '{current_task}': ").strip()
@@ -41,13 +41,14 @@ def update_task(task_list):
             print("Task updated successfully.")
         else:
             print("Task not updated. No new description entered.")
-    print(f"Updated Task List: {task_list}")
+    print_tasks(task_list)
 
 
-def get_task_index(task_count, action_type):
+def get_task_index(task_list, action_type):
     """
     Prompts for a valid task index for the specified action.
     """
+    task_count = len(task_list)
     try:
         index = int(input(f"Enter the task number to {action_type} (1 to {task_count}): ")) - 1
         if 0 <= index < task_count:
@@ -84,9 +85,16 @@ def save_tasks_to_file(task_list, filename="tasks.txt"):
         print(f"Error saving tasks: {e}")
 
 
+def print_tasks(task_list):
+    """
+    Prints the current list of tasks.
+    """
+    print(f"Updated Task List: {task_list}")
+
+
 def main():
     task_list = load_tasks_from_file()
-    print(f"Current tasks: {task_list}")
+    print("Current tasks:", ', '.join(task_list) if task_list else "None")
 
     actions = {
         1: add_task,
