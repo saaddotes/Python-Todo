@@ -2,7 +2,7 @@ def add_task(task_list):
     """
     Adds a new task to the task list.
     """
-    new_task = input("Enter a new task: ").strip()
+    new_task = get_task_input("Enter a new task:")
     if new_task:
         task_list.append(new_task)
         print("Task added successfully.")
@@ -15,33 +15,44 @@ def delete_task(task_list):
     """
     Deletes a task from the task list using its 1-based index.
     """
-    if not task_list:
-        print("No tasks to delete.")
-        return
-    index = get_task_index(task_list, 'delete')
-    if index is not None:
-        removed_task = task_list.pop(index)
-        print(f"Task '{removed_task}' deleted successfully.")
-    print_tasks(task_list)
+    modify_task_list(task_list, action_type='delete')
 
 
 def update_task(task_list):
     """
     Updates a task in the task list using its 1-based index.
     """
+    modify_task_list(task_list, action_type='update')
+
+
+def modify_task_list(task_list, action_type):
+    """
+    Modifies the task list based on action type ('delete' or 'update').
+    """
     if not task_list:
-        print("No tasks to update.")
+        print(f"No tasks to {action_type}.")
         return
-    index = get_task_index(task_list, 'update')
+    index = get_task_index(task_list, action_type)
     if index is not None:
-        current_task = task_list[index]
-        new_description = input(f"Enter new task description to replace '{current_task}': ").strip()
-        if new_description:
-            task_list[index] = new_description
-            print("Task updated successfully.")
-        else:
-            print("Task not updated. No new description entered.")
+        if action_type == 'delete':
+            removed_task = task_list.pop(index)
+            print(f"Task '{removed_task}' deleted successfully.")
+        elif action_type == 'update':
+            current_task = task_list[index]
+            new_description = get_task_input(f"Enter new task description to replace '{current_task}':")
+            if new_description:
+                task_list[index] = new_description
+                print("Task updated successfully.")
+            else:
+                print("Task not updated. No new description entered.")
     print_tasks(task_list)
+
+
+def get_task_input(prompt):
+    """
+    Utility function to get input from the user with stripping the whitespace.
+    """
+    return input(prompt).strip()
 
 
 def get_task_index(task_list, action_type):
@@ -89,12 +100,18 @@ def print_tasks(task_list):
     """
     Prints the current list of tasks.
     """
-    print(f"Updated Task List: {task_list}")
+    if task_list:
+        print("Updated Task List:")
+        for idx, task in enumerate(task_list, start=1):
+            print(f"{idx}. {task}")
+    else:
+        print("No tasks available.")
 
 
 def main():
     task_list = load_tasks_from_file()
-    print("Current tasks:", ', '.join(task_list) if task_list else "None")
+    print("Current tasks:")
+    print_tasks(task_list)
 
     actions = {
         1: add_task,
