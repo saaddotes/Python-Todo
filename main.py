@@ -64,12 +64,9 @@ def get_task_index(task_list, action_type):
         index = int(input(f"Enter the task number to {action_type} (1 to {task_count}): ")) - 1
         if 0 <= index < task_count:
             return index
-        else:
-            print("Invalid number. Please enter a valid index.")
-            return None
+        print("Invalid number. Please enter a valid index.")
     except ValueError:
         print("Invalid input. Please enter a numerical index.")
-        return None
 
 
 def load_tasks_from_file(filename="tasks.txt"):
@@ -90,7 +87,7 @@ def save_tasks_to_file(task_list, filename="tasks.txt"):
     """
     try:
         with open(filename, "w") as file:
-            file.writelines(task + "\n" for task in task_list)
+            file.writelines(f"{task}\n" for task in task_list)
         print("Tasks saved to file successfully.")
     except IOError as e:
         print(f"Error saving tasks: {e}")
@@ -124,7 +121,7 @@ def main():
             if action == 0:
                 print("Exiting Task Manager.")
                 break
-            elif action in actions:
+            if action in actions:
                 actions[action](task_list)
             else:
                 print("Please enter a valid option.")
