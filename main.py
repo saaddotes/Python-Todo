@@ -50,7 +50,7 @@ def modify_task_list(task_list, action_type):
 
 def get_task_input(prompt):
     """
-    Utility function to get input from the user with stripping the whitespace.
+    Utility function to get input from the user with stripped whitespace.
     """
     return input(prompt).strip()
 
