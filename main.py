@@ -60,13 +60,17 @@ def get_task_index(task_list, action_type):
     Prompts for a valid task index for the specified action.
     """
     task_count = len(task_list)
-    try:
-        index = int(input(f"Enter the task number to {action_type} (1 to {task_count}): ")) - 1
-        if 0 <= index < task_count:
-            return index
-        print("Invalid number. Please enter a valid index.")
-    except ValueError:
-        print("Invalid input. Please enter a numerical index.")
+    if task_count == 0:
+        print("No tasks to select.")
+        return None
+    while True:
+        try:
+            index = int(input(f"Enter the task number to {action_type} (1 to {task_count}): ")) - 1
+            if 0 <= index < task_count:
+                return index
+            print("Invalid number. Please enter a valid index.")
+        except ValueError:
+            print("Invalid input. Please enter a numerical index.")
 
 
 def load_tasks_from_file(filename="tasks.txt"):
